@@ -9,7 +9,6 @@ connection.onopen = function () {
 // Do stuff based on message
 connection.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    console.log("Received message " + data);
 
     if (data['op'] == '+') {
         addCard(data);
