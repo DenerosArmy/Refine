@@ -120,7 +120,7 @@ function removeCards(data) {
         setTimeout(function () {
             $('div#' + id + '.card').addClass('hidden');
             removeCards(data);
-        }, 200);
+        }, 100);
     }
 
     setTimeout(function (){
@@ -131,7 +131,14 @@ function removeCards(data) {
             var i = 0;
             while (usernames[i] == username) i++;
             var old_user = Object.keys(cardStack)[i];
-            cardStack[old_user]['column'].setAttribute('style', 'left:25%;');
+            column = cardStack[old_user]['column']
+            console.log(column.style.left);
+            console.log(column.style.right);
+            if (column.style.left) {
+                column.setAttribute('style', 'left:25%;');
+            } else if (column.style.right) {
+                column.setAttribute('style', 'right:25%;');
+            }
         }
 
     }, 500);
