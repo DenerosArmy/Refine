@@ -97,20 +97,35 @@ def get_connected_display(device_id):
 class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
-        print("Connection established")
+        print("Connection with airport display established")
 
     def on_message(self, message):
-        update = DISPLAYS[message].get_update()
-        print("Sending message: {0}".format(update))
+        update = DISPLAYS["Jifi"].get_update()
+        print("Sending message to airport: {0}".format(update))
         self.write_message(json.dumps(update))
 
     def on_close(self):
-        print("Connection terminated")
+        print("Connection with airport display terminated")
+
+
+class MallUpdateHandler(tornado.websocket.WebSocketHandler):
+
+    def open(self):
+        print("Connection with mall display established")
+
+    def on_message(self, message):
+        update = DISPLAYS["Jifi2"].get_update()
+        print("Sending message to mall: {0}".format(update))
+        self.write_message(json.dumps(update))
+
+    def on_close(self):
+        print("Connection with mall display terminated")
 
 
 application = tornado.web.Application([
     (r"/push_updates", AndroidHandler),
     (r"/get_airport_updates", AirportUpdateHandler),
+    (r"/get_mall_updates", MallUpdateHandler),
 ])
 
 if __name__ == "__main__":
