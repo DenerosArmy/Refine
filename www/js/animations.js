@@ -24,6 +24,16 @@ DATA2 = {
     user_name: "jian_leong",
 }
 
+PLACE_DATA = {
+    type: "flight_info",
+    user_name: "jian_leong",
+    name: 'Hollywood Beach',
+    img: '../img/hollywood-beach.jpg',
+    distance: '21.5 mi',
+    type: "places",
+
+}
+
 RENTAL_DATA = {
     cars: [{
             model: "Honda Accord 2012",
@@ -49,15 +59,6 @@ TYPE_TO_TITLE = {
 }
 
 cardStack = {}
-// cardStack = {<user_name>: {"column": <column_elem>, "cards": [<cards>,]}}
-
-jQuery.fn.center = function () {
-    //this.css("position","absolute");
-    var top = ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px",
-        left = ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px";
-    this.animate({top: top, left: left});
-    return this;
-}
 
 function addCard(data) {
     if (data['type'] == 'flight_info') {
@@ -65,7 +66,6 @@ function addCard(data) {
         var card = buildFlightCard(data);
     }
     else if (data['type'] == 'places') {
-        data['title'] = "Hollywood Beach";
         var card = buildPlaceCard(data);
     }
     else if (data['type'] == 'rentals') {
@@ -229,7 +229,7 @@ function buildPlaceCard(data) {
 
     var cardContent = document.createElement('div');
     cardContent.setAttribute('class', 'card-content');
-    cardContent.setAttribute('style', "background-image: url('../img/hollywood-beach.jpg');height: 350px");
+    cardContent.setAttribute('style', "background-image: url('" + data['img'] + "');height: 350px;");
     card.appendChild(cardContent);
 
     var contentContainer = document.createElement('div');
@@ -237,7 +237,7 @@ function buildPlaceCard(data) {
     contentContainer.style.paddingTop = "5px";
     cardContent.appendChild(contentContainer);
 
-    card.getElementsByClassName('card-title')[0].innerHTML += " &mdash; 1.5 mi";
+    card.getElementsByClassName('card-title')[0].innerHTML = data['name'] + " &mdash; " + data['distance'];
 
     return card;
 }
