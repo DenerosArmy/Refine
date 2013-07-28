@@ -3,7 +3,8 @@ DATA = {
     display_name:  "Richie Z.",
     flight_gate: "G45",
     flight_number: "UA 456",
-    flight_time: "2045",
+    departure_time: "11:24 AM",
+    arrival_time: "5:31 PM",
     op: "+",
     profile_image_url: "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/372355_590037593_561933968_q.jpg",
     type: "flight_info",
@@ -20,7 +21,12 @@ cardStack = {}
 
 function addCard(data) {
     console.log(data);
-    var card = buildFlightCard(data);
+    if (data['type'] == 'flight_info') {
+        var card = buildFlightCard(data);
+    }
+    else {
+        var card = buildCardWithHeader(data);
+    }
     var id = data['user_name'] + '-' + data['type'];
 
     document.getElementById('card-column').appendChild(card);
@@ -55,7 +61,7 @@ function removeCards(data) {
     }, 1000);
 }
 
-function buildFlightCard(data) {
+function buildCardWithHeader(data) {
     var id = data['user_name'] + '-' + data['type'];
     
     var card = document.createElement('div');
@@ -87,4 +93,31 @@ function buildFlightCard(data) {
     cardHeader.appendChild(personName);
 
     return card;
+}
+
+function buildFlightCard(data) {
+    var card = buildCardWithHeader(data);
+
+    var cardContent = document.createElement('div');
+    cardContent.setAttribute('class', 'card-content');
+    card.appendChild(cardContent);
+    
+    var flightInfo = document.createElement('p');
+    flightInfo.setAttribute('class', 'flight-info');
+    flightInfo.innerHTML = "United Airlines flight <em>" + data['flight_number'] + "</em> to <em>" + data['destination'] + "</em>";
+    cardContent.appendChild(flightInfo);
+
+    var flightDeparture = document.createElement('div');
+    flightDeparture.setAttribute('class', 'departure');
+    flightDeparture.innerHTML = "<p class='title'>Departure</p> <p class='info'>Gate 48 &nbsp;&nbsp;<em>" + data['departure_time'] + "</em></p>";
+
+    var flightArrival = document.createElement('div');
+    flightArrival.setAttribute('class', 'arrival');
+    flightArrival.innerHTML = "<p class='title'>Arrival</p> <p class='info'>Gate 24 &nbsp;&nbsp;<em>" + data['arrival_time'] + "</em></p>";
+
+    cardContent.appendChild(flightDeparture);
+    cardContent.appendChild(flightArrival);
+
+
+    return card
 }

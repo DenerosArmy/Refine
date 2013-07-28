@@ -13,5 +13,8 @@ connection.onmessage = function (msg) {
     if (data['op'] == '+') {
         addCard(data);
     }
+    else if (data['op'] == '-') {
+        removeCards(data);
+    }
     setTimeout(connection.onopen, 100);
 };

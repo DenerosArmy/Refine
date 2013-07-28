@@ -30,7 +30,7 @@ div.hidden {
   border: 2px solid #FAFAFA;
   box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
   display: inline-block;
-	height:210px;
+	height:auto;
   margin: 1%;
   opacity: 1;
   padding: 2%;
@@ -71,6 +71,7 @@ div.hidden {
 	font-family: 'Roboto', sans-serif;
 	/*font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;*/
 }
+
 .card-header p.card-title {
 	color: #222;
 	float: left;
@@ -82,4 +83,60 @@ div.hidden {
 	color: #888;
 	float: right;
 	font-size: 18px;
+}
+
+.card-content {
+	color: #666;
+	font-family: 'Lato', sans-serif;
+	height: auto;
+	padding-top:10px;
+}
+
+.card-content p.flight-info {
+	color: #444;
+	font-size:28px;
+	font-weight: 100;
+}
+
+.card-content p.flight-info em {
+	color: #666;
+	font-style: normal;
+	font-weight: 300;
+}
+
+.card-content .departure {
+	float:left;
+	padding-top: 10px;
+	padding-right: 2%;
+	width: 48%;
+}
+.card-content .departure p {
+	font-family: 'Roboto', sans-serif;
+	font-size:16px;
+	font-weight: 400;
+}
+
+.card-content .arrival {
+	float:right;
+	padding-top: 10px;
+	padding-left: 2%;
+	width: 48%;
+}
+
+.card-content .arrival p {
+	font-family: 'Roboto', sans-serif;
+	font-size:16px;
+	font-weight: 400;
+}
+
+.card-content p.info {
+	color: #666;
+	font-family: 'Lato', sans-serif;
+	font-size:24px;
+	font-weight: 100;
+}
+
+.card-content p.info em {
+	font-style: normal;
+	font-weight: 400;
 }
