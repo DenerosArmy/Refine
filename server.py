@@ -30,7 +30,7 @@ class Display(object):
         print("Removing all cards for {0}".format(dev_id))
         self.devices.remove(dev_id)
         self.update_queue.append(
-            {"op": "-", "display_name": pi.get_displayname(dev_id)})
+            {"op": "-", "user_name": pi.get_username(dev_id)})
 
     def get_update(self):
         if self.update_queue:
@@ -45,23 +45,23 @@ class Display(object):
         return "Test"
 
 
-#class AndroidHandler(tornado.web.RequestHandler):
+class CurlHandler(tornado.web.RequestHandler):
 
-    #@tornado.web.asynchronous
-    #def post(self):
-        #dev_id = self.get_argument("device_id")
-        #disp_id = self.get_argument("display_id")
-        #data = self.get_argument("data")
-        #curr_connection = get_connected_display(dev_id)
-        #if curr_connection:
-            #if disp_id and curr_connection != disp_id:
-                #DISPLAYS[disp_id].add_device(dev_id)
-                #DISPLAYS[curr_connection].remove_device(dev_id)
-            #elif not disp_id:
-                #DISPLAYS[curr_connection].remove_device(dev_id)
-        #elif disp_id:
-            #DISPLAYS[disp_id].add_device(dev_id)
-        #self.finish()
+    @tornado.web.asynchronous
+    def post(self):
+        dev_id = self.get_argument("device_id")
+        disp_id = self.get_argument("display_id")
+        curr_connection = get_connected_display(dev_id)
+        if curr_connection:
+            if disp_id and curr_connection != disp_id:
+                DISPLAYS[disp_id].add_device(dev_id)
+                DISPLAYS[curr_connection].remove_device(dev_id)
+            elif not disp_id:
+                DISPLAYS[curr_connection].remove_device(dev_id)
+        elif disp_id:
+            DISPLAYS[disp_id].add_device(dev_id)
+        self.finish()
+
 
 class AndroidHandler(tornado.websocket.WebSocketHandler):
 
@@ -124,6 +124,7 @@ class MallUpdateHandler(tornado.websocket.WebSocketHandler):
 
 application = tornado.web.Application([
     (r"/push_updates", AndroidHandler),
+    (r"/curl_updates", CurlHandler),
     (r"/get_airport_updates", AirportUpdateHandler),
     (r"/get_mall_updates", MallUpdateHandler),
 ])
