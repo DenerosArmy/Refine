@@ -11,41 +11,113 @@ DATA = {
     user_name: "richie_zeng",
 }
 
+DATA2 = {
+    destination: "Miami, FL",
+    display_name:  "Jian L.",
+    flight_gate: "G45",
+    flight_number: "UA 456",
+    departure_time: "11:24 AM",
+    arrival_time: "5:31 PM",
+    op: "+",
+    profile_image_url: "https://lh6.googleusercontent.com/-TpuvTBw3vx8/UQM7IOmkmBI/AAAAAAAAAbI/DzNehhnVEWE/w256-h257-no/375563_10151168765508994_657905193_n.jpeg",
+    type: "flight_info",
+    user_name: "jian_leong",
+}
+
+RENTAL_DATA = {
+    cars: [{
+            model: "Honda Accord 2012",
+            price: "$30.09",
+            img: "../img/accord.jpg"
+        }, {
+            model: "Toyota Camry 2009",
+            price: "$24.09",
+            img: "../img/camry.jpg"
+        }, {
+            model: "Mitsubishi Evolution X",
+            price: "$36.09",
+            img: "../img/evo.jpg"
+        }
+    ]
+}
+
 
 TYPE_TO_TITLE = {
     'flight_info': 'Flight Details',
+    'places': 'Places to Visit',
+    'rentals': 'Car Rentals',
 }
 
 cardStack = {}
+// cardStack = {<user_name>: {"column": <column_elem>, "cards": [<cards>,]}}
 
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    var top = ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px",
+        left = ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px";
+    this.animate({top: top, left: left});
+    return this;
+}
 
 function addCard(data) {
-    console.log(data);
     if (data['type'] == 'flight_info') {
+        data['title'] = TYPE_TO_TITLE[data['type']];
         var card = buildFlightCard(data);
+    }
+    else if (data['type'] == 'places') {
+        data['title'] = "Hollywood Beach";
+        var card = buildPlaceCard(data);
+    }
+    else if (data['type'] == 'rentals') {
+        data['title'] = TYPE_TO_TITLE[data['type']];
+        data['cars'] = RENTAL_DATA['cars'];
+        var card = buildRentalCard(data);
     }
     else {
         var card = buildCardWithHeader(data);
     }
+
     var id = data['user_name'] + '-' + data['type'];
 
-    document.getElementById('card-column').appendChild(card);
-
     if (!cardStack[data['user_name']]) {
-        cardStack[data['user_name']] = []
+        var username = data['user_name'];
+        console.log("Creating column "+username+'-column');
+        var column = document.createElement('div');
+        column.setAttribute('class', 'card-column');
+        column.setAttribute('id', username + '-column');
+        var usernames = Object.keys(cardStack);
+        if (usernames.length > 0) { // If there's already a column
+          var i = 0;
+          while (usernames[i] == username) i++;
+          console.log(Object.keys(cardStack));
+          console.log(cardStack);
+          var old_user = Object.keys(cardStack)[i];
+          cardStack[old_user]['column'].setAttribute('style', 'float:left');
+          column.setAttribute('style', 'float:right');
+        } else {
+          column.setAttribute('style', 'margin-left:auto;margin-right:auto');
+        }
+        document.getElementById('card-container').appendChild(column);
+        cardStack[username] = {};
+        cardStack[username]['column'] = column;
+        cardStack[username]['cards'] = [];
     }
 
-    cardStack[data['user_name']].push(id);
+    cardStack[data['user_name']]['column'].appendChild(card);
+    cardStack[data['user_name']]['cards'].push(id);
 
     setTimeout(function () {
+        console.log($('div#' + id + '.card'));
         $('div#' + id + '.card').removeClass('hidden');
     }, 0);
+
 }
 
-
 function removeCards(data) {
-    if (cardStack[data['user_name']].length != 0) {
-        var id = cardStack[data['user_name']].pop();
+    console.log("Called");
+    var username = data['user_name'];
+    if (cardStack[username]['cards'].length != 0) {
+        var id = cardStack[username]['cards'].pop();
 
         setTimeout(function () {
             $('div#' + id + '.card').addClass('hidden');
@@ -54,16 +126,22 @@ function removeCards(data) {
     }
 
     setTimeout(function (){
-        var column = document.getElementById('card-column')
-        while (column.hasChildNodes()) {
-            column.removeChild(column.lastChild);
+        var column = document.getElementById(data['user_name'] + '-column');
+        document.getElementById('card-container').removeChild(column);
+        var usernames = Object.keys(cardStack);
+        if (usernames.length > 0) { // If there's already a column
+          var i = 0;
+          while (usernames[i] == username) i++;
+          var old_user = Object.keys(cardStack)[i];
+          cardStack[old_user]['column'].setAttribute('style', 'margin-left:auto;margin-right:auto');
         }
+
     }, 1000);
 }
 
 function buildCardWithHeader(data) {
     var id = data['user_name'] + '-' + data['type'];
-    
+
     var card = document.createElement('div');
     card.setAttribute('class', 'card hidden');
     card.setAttribute('id', id);
@@ -84,7 +162,7 @@ function buildCardWithHeader(data) {
 
     var cardTitle = document.createElement('p');
     cardTitle.setAttribute('class', 'card-title');
-    cardTitle.innerHTML = TYPE_TO_TITLE[data['type']]
+    cardTitle.innerHTML = data['title']
     cardHeader.appendChild(cardTitle);
 
     var personName = document.createElement('p');
@@ -100,6 +178,7 @@ function buildFlightCard(data) {
 
     var cardContent = document.createElement('div');
     cardContent.setAttribute('class', 'card-content');
+    cardContent.setAttribute('style', "background-image: url('../img/miami.jpg');");
     card.appendChild(cardContent);
 
     var blackOverlay = document.createElement('div');
@@ -108,10 +187,11 @@ function buildFlightCard(data) {
 
     var contentContainer = document.createElement('div');
     contentContainer.style.paddingLeft = "10px";
+    contentContainer.style.paddingTop = "5px";
     blackOverlay.appendChild(contentContainer);
 
     var flightInfo = document.createElement('p');
-    flightInfo.setAttribute('class', 'flight-info');
+    flightInfo.setAttribute('class', 'info-header');
     flightInfo.innerHTML = "United Airlines flight <em>" + data['flight_number'] + "</em> to <em>" + data['destination'] + "</em>";
     contentContainer.appendChild(flightInfo);
 
@@ -126,6 +206,53 @@ function buildFlightCard(data) {
     contentContainer.appendChild(flightDeparture);
     contentContainer.appendChild(flightArrival);
 
-
     return card
+}
+
+function buildPlaceCard(data) {
+    var id = data['user_name'] + '-' + data['type'];
+    var card = buildCardWithHeader(data);
+
+    var cardContent = document.createElement('div');
+    cardContent.setAttribute('class', 'card-content');
+    cardContent.setAttribute('style', "background-image: url('../img/hollywood-beach.jpg');");
+    card.appendChild(cardContent);
+
+    var contentContainer = document.createElement('div');
+    contentContainer.style.paddingLeft = "10px";
+    contentContainer.style.paddingTop = "5px";
+    cardContent.appendChild(contentContainer);
+
+    card.getElementsByClassName('card-title')[0].innerHTML += " &mdash; 1.5 mi";
+
+    return card;
+}
+
+function buildRentalCard(data) {
+    var card = buildCardWithHeader(data);
+
+    var cardContent = document.createElement('div');
+    cardContent.setAttribute('class', 'card-content');
+    cardContent.style.marginTop = "0px";
+    cardContent.style.height = "auto";
+    card.appendChild(cardContent);
+
+    var contentContainer = document.createElement('div');
+    contentContainer.style.paddingLeft = "10px";
+    contentContainer.style.paddingTop = "5px";
+    cardContent.appendChild(contentContainer);
+
+    for (var i=0; i < data['cars'].length; i++) {
+        var carInfo = data['cars'][i];
+
+        var carInfoContainer = document.createElement('div');
+        carInfoContainer.setAttribute('class', 'car-option-container');
+        contentContainer.appendChild(carInfoContainer);
+
+        var carIcon = document.createElement('div');
+        carIcon.setAttribute('class', 'car-icon');
+        carIcon.setAttribute('style', "background-image: url('" + carInfo['img'] + "');");
+        carInfoContainer.appendChild(carIcon);
+    }
+    return card;
 }

@@ -9,11 +9,24 @@
 </head>
 
 <body>
-<div class='container'>
-	<div id='card-column'>
-	</div>
+<div id='card-container' class='container'>
 </div>
 </body>
 
 <script>
+  addCard(DATA);
+  addCard(DATA);
+  setTimeout(function() {addCard(DATA2);}, 2000);
+  setTimeout(function() {addCard(DATA2);}, 2000);
+  setTimeout(function() {removeCards(DATA);}, 6000);
+  setTimeout(function() {removeCards(DATA2);}, 4000);
+  addCard(DATA);
+
+  newData = jQuery.extend({}, DATA);
+  newData['type'] = 'places';
+  //addCard(newData);
+
+  newData = jQuery.extend({}, DATA);
+  newData['type'] = 'rentals';
+  addCard(newData);
 </script>
