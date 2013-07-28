@@ -212,7 +212,7 @@ function buildPlaceCard(data) {
 
     var cardContent = document.createElement('div');
     cardContent.setAttribute('class', 'card-content');
-    cardContent.setAttribute('style', "background-image: url('../img/hollywood-beach.jpg');");
+    cardContent.setAttribute('style', "background-image: url('../img/hollywood-beach.jpg');height: 350px");
     card.appendChild(cardContent);
 
     var contentContainer = document.createElement('div');
