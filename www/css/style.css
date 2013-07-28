@@ -1,0 +1,83 @@
+html{color:#000;background:#FFF;}
+
+body,div,dl,dt,dd,ul,ol,li,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}
+
+body,html {
+	background-color: #e5e5e5;
+	background-image: url('../img/squairy.png');
+	background-repeat: repeat;
+	overflow: hidden;
+}
+
+div.hidden {
+	margin-top: 700px;
+}
+
+.container {
+	padding:15px;
+}
+
+#card-column {
+	height:100%;
+	width:50%;
+}
+
+.card {
+  background: #FEFEFE;
+  background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+  border: 2px solid #FAFAFA;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  display: inline-block;
+	height:210px;
+  margin: 10px;
+  opacity: 1;
+  padding: 10px;
+  padding-bottom: 5px;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+	width:380px;
+}
+
+.card-header {
+	border-bottom-style:solid;
+	border-color:#CCC;
+	border-width:1px;
+	height: 50px;
+	width: 100%;
+}
+
+.card-image-container {
+	float:left;
+	height: 40px;
+	width: 40px;
+	padding-bottom:10px;
+	padding-right:10px;
+}
+
+.card-image {
+	background-size:100%;
+	height: 40px;
+	width: 40px;
+	/* Do we want to look more like Google or Facebook? */
+	/*-webkit-border-radius:50%;*/
+}
+.card-header p {
+	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+}
+.card-header p.card-title {
+	color: #888;
+	font-size:16px;
+}
+
+.card-header p.person-name {
+	color: #333;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.card-header p.card-x {
+	color: #AAA;
+	float:right;
+}

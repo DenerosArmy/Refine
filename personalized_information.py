@@ -3,16 +3,22 @@ from yelp import *
 def get_username(device_id):
     return "Richie Zeng"
 
+def get_displayname(device_id):
+    return get_username(device_id).replace(" ", "_").lower()
+
 def get_airport_data(device_id):
     #returns a dictionary
-    return {"op":"+",
-            "type": "flight_info",
-            "user_name": "Richie Zeng",
-            "profile_image_url": "google.com",
-            "flight_number": "UA 456",
-            "flight_gate": "G45",
-            "flight_time": "2045",
-            "destination": "Miami, FL"}
+    user_name = get_username(device_id)
+    display_name = get_displayname(device_id)
+    return [{"op":"+",
+             "type": "flight_info",
+             "display_name": display_name,
+             "user_name": user_name,
+             "profile_image_url": "google.com",
+             "flight_number": "UA 456",
+             "flight_gate": "G45",
+             "flight_time": "2045",
+             "destination": "Miami, FL"},]
 
 
 def get_destination_info():
