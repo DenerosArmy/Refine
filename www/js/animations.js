@@ -38,7 +38,7 @@ function buildFlightCard(data) {
 
     var cardTitle = document.createElement('p');
     cardTitle.setAttribute('class', 'card-title');
-    cardTitle.innerHTML = "Flight information for";
+    cardTitle.innerHTML = "Flight Details";
     cardHeader.appendChild(cardTitle);
 
     var personName = document.createElement('p');
