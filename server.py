@@ -45,13 +45,31 @@ class Display(object):
         return "Test"
 
 
-class AndroidHandler(tornado.web.RequestHandler):
+#class AndroidHandler(tornado.web.RequestHandler):
 
-    @tornado.web.asynchronous
-    def post(self):
-        dev_id = self.get_argument("device_id")
-        disp_id = self.get_argument("display_id")
-        data = self.get_argument("data")
+    #@tornado.web.asynchronous
+    #def post(self):
+        #dev_id = self.get_argument("device_id")
+        #disp_id = self.get_argument("display_id")
+        #data = self.get_argument("data")
+        #curr_connection = get_connected_display(dev_id)
+        #if curr_connection:
+            #if disp_id and curr_connection != disp_id:
+                #DISPLAYS[disp_id].add_device(dev_id)
+                #DISPLAYS[curr_connection].remove_device(dev_id)
+            #elif not disp_id:
+                #DISPLAYS[curr_connection].remove_device(dev_id)
+        #elif disp_id:
+            #DISPLAYS[disp_id].add_device(dev_id)
+        #self.finish()
+
+class AndroidHandler(tornado.websocket.WebSocketHandler):
+
+    def open(self):
+        print("Connection with Android established")
+
+    def on_message(self, message):
+        dev_id, disp_id = message.split("|")
         curr_connection = get_connected_display(dev_id)
         if curr_connection:
             if disp_id and curr_connection != disp_id:
@@ -63,8 +81,11 @@ class AndroidHandler(tornado.web.RequestHandler):
             DISPLAYS[disp_id].add_device(dev_id)
         self.finish()
 
+    def on_close(self):
+        print("Connection with Android terminated")
 
-DISPLAYS = {"1": Display("airport"), "2": Display("mall")}
+
+DISPLAYS = {"Jifi": Display("airport"), "Jifi2": Display("mall")}
 
 
 def get_connected_display(device_id):

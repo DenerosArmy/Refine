@@ -3,7 +3,7 @@ var connection = new WebSocket('ws://198.61.194.98:9000/get_airport_updates')
 
 // When the connection is open, send some data to the server
 connection.onopen = function () {
-    connection.send("1");
+    connection.send("Jifi");
 };
 
 // Do stuff based on message
