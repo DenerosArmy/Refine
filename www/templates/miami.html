@@ -12,25 +12,4 @@
 <div id='card-container' class='container'>
 </div>
 </body>
-
-<script>
-  addCard(DATA);
-  newData = jQuery.extend({}, DATA);
-  newData['type'] = 'places';
-  addCard(newData);
-
-  newData = jQuery.extend({}, DATA);
-  newData['type'] = 'rentals';
-  addCard(newData);
-
-  setTimeout(function() {addCard(DATA2);}, 1000);
-  setTimeout(function() {addCard(DATA2);}, 1000);
-  setTimeout(function() {removeCards(DATA2);}, 10000);
-  setTimeout(function() {removeCards(DATA);}, 5000);
-/*
-addCard(DATA);
-setTimeout(function() {removeCards(DATA);}, 1000);
-addCard(DATA);
-setTimeout(function() {removeCards(DATA);}, 1000);
-*/
-</script>
+</html>

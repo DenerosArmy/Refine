@@ -26,7 +26,7 @@ class Display(object):
         print("Removing all cards for {0}".format(dev_id))
         self.devices.remove(dev_id)
         self.update_queue.append(
-            {"op": "-", "user_name": pi.get_username(dev_id)})
+            {"op": "-", "user_name": pi.User.get_user_name(dev_id)})
 
     def get_update(self):
         if self.update_queue:
