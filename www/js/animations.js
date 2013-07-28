@@ -101,6 +101,14 @@ function buildFlightCard(data) {
     var cardContent = document.createElement('div');
     cardContent.setAttribute('class', 'card-content');
     card.appendChild(cardContent);
+
+    var bgImg = document.createElement('div');
+    bgImg.setAttribute('class', 'card-content-bg');
+    card.appendChild(bgImg);
+
+    var blackOverlay = document.createElement('div');
+    blackOverlay.setAttribute('class', 'card-content-overlay');
+    card.appendChild(blackOverlay);
     
     var flightInfo = document.createElement('p');
     flightInfo.setAttribute('class', 'flight-info');
