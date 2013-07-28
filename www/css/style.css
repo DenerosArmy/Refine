@@ -91,38 +91,36 @@ div.hidden {
 	color: #666;
 	font-family: 'Lato', sans-serif;
 	height: 200px;
-	margin-top:10px;
-}
-
-.card-content-bg {
-	background-image: url('../img/miami.jpg');
-	background-size: cover;
 	margin-left:-10px;
 	margin-right:-10px;
+	margin-top:10px;
+	position:relative;
+	z-index: 0;
 }
 
 .card-content-bg-overlay {
-	background-color: #666;
-	height: 200px;
-	margin-left:-10px;
-	margin-right:-10px;
+	background-color:rgba(0, 0, 0, 0.6);
+	height:200px;
+	position:absolute;
+	width:100%;
+	z-index:9999;
 }
 
 .card-content p.flight-info {
 	color: #DDD;
-	font-size:28px;
-	font-weight: 100;
+	font-size:32px;
+	font-weight: 300;
+	padding-bottom:20px;
 }
 
 .card-content p.flight-info em {
 	color: #EEE;
 	font-style: normal;
-	font-weight: 300;
+	font-weight: 400;
 }
 
 .card-content .departure {
 	float:left;
-	padding-top: 10px;
 	padding-right: 2%;
 	width: 48%;
 }
@@ -135,7 +133,6 @@ div.hidden {
 
 .card-content .arrival {
 	float:right;
-	padding-top: 10px;
 	padding-left: 2%;
 	width: 48%;
 }

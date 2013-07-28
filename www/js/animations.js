@@ -102,18 +102,18 @@ function buildFlightCard(data) {
     cardContent.setAttribute('class', 'card-content');
     card.appendChild(cardContent);
 
-    var bgImg = document.createElement('div');
-    bgImg.setAttribute('class', 'card-content-bg');
-    card.appendChild(bgImg);
-
     var blackOverlay = document.createElement('div');
-    blackOverlay.setAttribute('class', 'card-content-overlay');
-    card.appendChild(blackOverlay);
-    
+    blackOverlay.setAttribute('class', 'card-content-bg-overlay');
+    cardContent.appendChild(blackOverlay);
+
+    var contentContainer = document.createElement('div');
+    contentContainer.style.paddingLeft = "10px";
+    blackOverlay.appendChild(contentContainer);
+
     var flightInfo = document.createElement('p');
     flightInfo.setAttribute('class', 'flight-info');
     flightInfo.innerHTML = "United Airlines flight <em>" + data['flight_number'] + "</em> to <em>" + data['destination'] + "</em>";
-    cardContent.appendChild(flightInfo);
+    contentContainer.appendChild(flightInfo);
 
     var flightDeparture = document.createElement('div');
     flightDeparture.setAttribute('class', 'departure');
@@ -123,8 +123,8 @@ function buildFlightCard(data) {
     flightArrival.setAttribute('class', 'arrival');
     flightArrival.innerHTML = "<p class='title'>Arrival</p> <p class='info'>Gate 24 &nbsp;&nbsp;<em>" + data['arrival_time'] + "</em></p>";
 
-    cardContent.appendChild(flightDeparture);
-    cardContent.appendChild(flightArrival);
+    contentContainer.appendChild(flightDeparture);
+    contentContainer.appendChild(flightArrival);
 
 
     return card
