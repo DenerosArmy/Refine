@@ -5,19 +5,32 @@ import urllib
 import urllib2
 
 
-def yelp():
+def locate_food(location="san francisco westfield mall", search_term="vegetarian"):
     consumer_key = "1Q5TbWVfwe5U3krF3eb9yw"
     consumer_secret = "CWCxOOjtX1zKStlu6p_BcY_7abo"
     token = "4gL5o2gxNnEFt5DgKkETDGEVPmocfKOJ"
     token_secret = "mDXZKcKOSNW7toDrsTyUyGUkGO4"
 
     url_params = {}
-    url_params['location'] = "san francisco"
-
-    response = request('api.yelp.com', '/v2/search', url_params, consumer_key, consumer_secret, token, token_secret)
-    print json.dumps(response, sort_keys=True, indent=2)
+    url_params['location'] = location
+    url_params['term'] = search_term
 
     
+    
+    response = request('api.yelp.com', '/v2/search', url_params, consumer_key, consumer_secret, token, token_secret)
+    j = json.dumps(response, sort_keys=True, indent=2)
+    a = json.loads(j)
+    restaurants_list =[]
+    restaurant = {}
+    for i in range(1,5):
+        restaurant["type"] = "restaurant_info"
+        restaurant["name"] = a["businesses"][i][u'name']
+        restaurant["address"] = a["businesses"][i][u'location'][u'address']
+        restaurant["image"] = a["businesses"][i][u'image_url']
+        restaurant["rating"] = a["businesses"][i][u'rating']
+        restaurants_list.append(restaurant)                         
+    return restaurants_list
+  
 
 def request(host, path, url_params, consumer_key, consumer_secret, token, token_secret):
   """Returns response for API request."""
