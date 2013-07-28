@@ -89,21 +89,19 @@ function addCard(data) {
 
     if (!cardStack[data['user_name']]) {
         var username = data['user_name'];
-        console.log("Creating column "+username+'-column');
         var column = document.createElement('div');
         column.setAttribute('class', 'card-column');
         column.setAttribute('id', username + '-column');
+
         var usernames = Object.keys(cardStack);
         if (usernames.length > 0) { // If there's already a column
-          var i = 0;
-          while (usernames[i] == username) i++;
-          console.log(Object.keys(cardStack));
-          console.log(cardStack);
-          var old_user = Object.keys(cardStack)[i];
-          cardStack[old_user]['column'].setAttribute('style', 'float:left');
-          column.setAttribute('style', 'float:right');
+            var i = 0;
+            while (usernames[i] == username) i++;
+            var old_user = Object.keys(cardStack)[i];
+            cardStack[old_user]['column'].setAttribute('style', 'left:0');
+            column.setAttribute('style', 'right:0');
         } else {
-          column.setAttribute('style', 'margin-left:auto;margin-right:auto');
+            column.setAttribute('style', 'left:25%');
         }
         document.getElementById('card-container').appendChild(column);
         cardStack[username] = {};
@@ -122,29 +120,37 @@ function addCard(data) {
 }
 
 function removeCards(data) {
-    console.log("Called");
     var username = data['user_name'];
-    if (cardStack[username]['cards'].length != 0) {
-        var id = cardStack[username]['cards'].pop();
+    if (cardStack[username]) {
+        if (cardStack[username]['cards'].length != 0) {
+            var id = cardStack[username]['cards'].pop();
 
-        setTimeout(function () {
-            $('div#' + id + '.card').addClass('hidden');
-            removeCards(data);
-        }, 200);
+            setTimeout(function () {
+                $('div#' + id + '.card').addClass('hidden');
+                removeCards(data);
+            }, 100);
+        }
     }
 
     setTimeout(function (){
         var column = document.getElementById(data['user_name'] + '-column');
-        document.getElementById('card-container').removeChild(column);
-        var usernames = Object.keys(cardStack);
-        if (usernames.length > 0) { // If there's already a column
-          var i = 0;
-          while (usernames[i] == username) i++;
-          var old_user = Object.keys(cardStack)[i];
-          cardStack[old_user]['column'].setAttribute('style', 'margin-left:auto;margin-right:auto');
-        }
+        if (cardStack[data['user_name']]) {
+            column.parentNode.removeChild(column);
+            delete cardStack[data['user_name']];
 
-    }, 1000);
+            var usernames = Object.keys(cardStack);
+            if (usernames.length > 0) { // If there's still another column
+                var remainingUser = usernames[0];
+                column = cardStack[remainingUser]['column']
+                if (column.style['cssText'].indexOf('left') !== -1) {
+                    column.setAttribute('style', 'left:25%');
+                } else if (column.style['cssText'].indexOf('right') !== -1) {
+                    column.setAttribute('style', 'right:25%');
+                }
+            }
+        }
+    }, 600);
+
 }
 
 function buildCardWithHeader(data) {
