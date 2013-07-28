@@ -41,7 +41,8 @@ class Display(object):
         return pi.get_airport_data(device_id)
 
     def get_mall_data(self, device_id):
-        return pi.get_mall_data(device_id)
+        #return pi.get_mall_data(device_id)
+        return "Test"
 
 
 class AndroidHandler(tornado.web.RequestHandler):
@@ -54,8 +55,8 @@ class AndroidHandler(tornado.web.RequestHandler):
         curr_connection = get_connected_display(dev_id)
         if curr_connection:
             if disp_id and curr_connection != disp_id:
-                DISPLAYS[curr_connection].remove_device(dev_id)
                 DISPLAYS[disp_id].add_device(dev_id)
+                DISPLAYS[curr_connection].remove_device(dev_id)
             elif not disp_id:
                 DISPLAYS[curr_connection].remove_device(dev_id)
         elif disp_id:
