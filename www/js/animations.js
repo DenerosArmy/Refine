@@ -233,26 +233,28 @@ function buildRentalCard(data) {
 
     var cardContent = document.createElement('div');
     cardContent.setAttribute('class', 'card-content');
-    cardContent.style.marginTop = "0px";
+    cardContent.style.marginTop = "10px";
     cardContent.style.height = "auto";
     card.appendChild(cardContent);
 
-    var contentContainer = document.createElement('div');
-    contentContainer.style.paddingLeft = "10px";
-    contentContainer.style.paddingTop = "5px";
-    cardContent.appendChild(contentContainer);
 
     for (var i=0; i < data['cars'].length; i++) {
         var carInfo = data['cars'][i];
 
         var carInfoContainer = document.createElement('div');
         carInfoContainer.setAttribute('class', 'car-option-container');
-        contentContainer.appendChild(carInfoContainer);
+        carInfoContainer.innerHTML = "<img src='" + carInfo['img'] + "' width='100%' border='1'>"
+        cardContent.appendChild(carInfoContainer);
 
-        var carIcon = document.createElement('div');
-        carIcon.setAttribute('class', 'car-icon');
-        carIcon.setAttribute('style', "background-image: url('" + carInfo['img'] + "');");
-        carInfoContainer.appendChild(carIcon);
+        var carModel = document.createElement('p');
+        carModel.setAttribute('class', 'car-model');
+        carModel.innerHTML = carInfo['model'];
+        carInfoContainer.appendChild(carModel);
+
+        var carPrice = document.createElement('p');
+        carPrice.setAttribute('class', 'car-price');
+        carPrice.innerHTML = carInfo['price'];
+        carInfoContainer.appendChild(carPrice);
     }
     return card;
 }
