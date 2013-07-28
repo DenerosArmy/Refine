@@ -1,14 +1,24 @@
-def get_flight_info():
-    #returns a tuple of flight number, ETA, date, gate location
-    return ('UA 767', '2350', 'July 9th, 2013', 'G45')
+def get_airport_data(device_id = '12345'):
+    #returns a dictionary
+    return {"op":"+",
+             "type": "flight_info",
+            "user_name": "Richie Zeng",
+            "profile_image_url": "google.com", 
+            "flight_number": "UA 456", 
+            "flight_gate": "G45",
+            "flight_time": "2045", 
+            "destination": "Miami, FL"}
+
 
 def get_destination_info():
     #returns an array of places of interest, hotels, cab companies
-    return('Golden Gate Park', 'The Hilton', 'Hertz Car Renta;')
+    return('Golden Gate Park', 'The Hilton', 'Hertz Car Rental')
 
 def get_food_info():
     #returns dictionary of restaurants and food rating
-    return{'McDonalds':3.4, 'TGIF':4.7, 'Crepes A Go Go':5.0}
+    return{'McDonalds':3.4,
+           'TGIF':4.7,
+           'Crepes A Go Go':5.0}
 
 def get_movie_info():
     #returns dictionary of movies and personalized ratings
