@@ -10,7 +10,7 @@ body,html {
 }
 
 div.hidden {
-	margin-top: 700px;
+	margin-top: 120%;
 }
 
 .container {
@@ -19,6 +19,8 @@ div.hidden {
 
 #card-column {
 	height:100%;
+	margin-left:auto;
+	margin-right:auto;
 	width:50%;
 }
 
@@ -28,56 +30,113 @@ div.hidden {
   border: 2px solid #FAFAFA;
   box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
   display: inline-block;
-	height:210px;
-  margin: 10px;
+	height:auto;
+  margin: 1%;
   opacity: 1;
-  padding: 10px;
-  padding-bottom: 5px;
+  padding: 2%;
+  padding-bottom: 1%;
 	-webkit-transition: all 0.5s ease;
 	-moz-transition: all 0.5s ease;
 	-o-transition: all 0.5s ease;
 	transition: all 0.5s ease;
-	width:380px;
+	width:94%;
 }
 
 .card-header {
 	border-bottom-style:solid;
 	border-color:#CCC;
 	border-width:1px;
-	height: 50px;
+	height: 35px;
 	width: 100%;
 }
 
 .card-image-container {
-	float:left;
-	height: 40px;
-	width: 40px;
-	padding-bottom:10px;
-	padding-right:10px;
+	float:right;
+	height: 30px;
+	padding-left: 12px;
+	width: 30px;
+/*
+	padding-bottom: 20px;
+*/
 }
 
 .card-image {
 	background-size:100%;
-	height: 40px;
-	width: 40px;
+	height: 24px;
+	width: 24px;
 	/* Do we want to look more like Google or Facebook? */
 	/*-webkit-border-radius:50%;*/
 }
 .card-header p {
-	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	font-family: 'Roboto', sans-serif;
+	/*font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;*/
 }
+
 .card-header p.card-title {
-	color: #888;
-	font-size:16px;
+	color: #222;
+	float: left;
+	font-size:24px;
+	font-weight: 100;
 }
 
 .card-header p.person-name {
-	color: #333;
-	font-weight: bold;
+	color: #888;
+	float: right;
 	font-size: 18px;
 }
 
-.card-header p.card-x {
-	color: #AAA;
+.card-content {
+	color: #666;
+	font-family: 'Lato', sans-serif;
+	height: auto;
+	padding-top:10px;
+}
+
+.card-content p.flight-info {
+	color: #444;
+	font-size:28px;
+	font-weight: 100;
+}
+
+.card-content p.flight-info em {
+	color: #666;
+	font-style: normal;
+	font-weight: 300;
+}
+
+.card-content .departure {
+	float:left;
+	padding-top: 10px;
+	padding-right: 2%;
+	width: 48%;
+}
+.card-content .departure p {
+	font-family: 'Roboto', sans-serif;
+	font-size:16px;
+	font-weight: 400;
+}
+
+.card-content .arrival {
 	float:right;
+	padding-top: 10px;
+	padding-left: 2%;
+	width: 48%;
+}
+
+.card-content .arrival p {
+	font-family: 'Roboto', sans-serif;
+	font-size:16px;
+	font-weight: 400;
+}
+
+.card-content p.info {
+	color: #666;
+	font-family: 'Lato', sans-serif;
+	font-size:24px;
+	font-weight: 100;
+}
+
+.card-content p.info em {
+	font-style: normal;
+	font-weight: 400;
 }
