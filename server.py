@@ -69,6 +69,7 @@ class AndroidHandler(tornado.websocket.WebSocketHandler):
         print("Connection with Android established")
 
     def on_message(self, message):
+        print("Received message {0} from Android".format(message))
         dev_id, disp_id = message.split("|")
         curr_connection = get_connected_display(dev_id)
         if curr_connection:
@@ -79,7 +80,6 @@ class AndroidHandler(tornado.websocket.WebSocketHandler):
                 DISPLAYS[curr_connection].remove_device(dev_id)
         elif disp_id:
             DISPLAYS[disp_id].add_device(dev_id)
-        self.finish()
 
     def on_close(self):
         print("Connection with Android terminated")
