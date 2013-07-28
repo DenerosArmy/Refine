@@ -52,7 +52,7 @@ cardStack = {}
 // cardStack = {<user_name>: {"column": <column_elem>, "cards": [<cards>,]}}
 
 jQuery.fn.center = function () {
-    this.css("position","absolute");
+    //this.css("position","absolute");
     var top = ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px",
         left = ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px";
     this.animate({top: top, left: left});
@@ -72,6 +72,14 @@ function addCard(data) {
         data['title'] = TYPE_TO_TITLE[data['type']];
         data['cars'] = RENTAL_DATA['cars'];
         var card = buildRentalCard(data);
+    }
+	else if (data['type'] == 'restaurants-veggie') {
+        
+        var card = buildRestaurantCard1(data);
+    }
+	else if (data['type'] == 'restaurants-meat') {
+        
+        var card = buildRestaurantCard2(data);
     }
     else {
         var card = buildCardWithHeader(data);
@@ -224,6 +232,46 @@ function buildPlaceCard(data) {
     cardContent.appendChild(contentContainer);
 
     card.getElementsByClassName('card-title')[0].innerHTML += " &mdash; 1.5 mi";
+
+    return card;
+}
+
+function buildRestaurantCard1(data) {
+	data['title'] = "Loving Hut";
+    var id = data['user_name'] + '-' + data['type'];
+    var card = buildCardWithHeader(data);
+
+    var cardContent = document.createElement('div');
+    cardContent.setAttribute('class', 'card-content');
+    cardContent.setAttribute('style', "background-image: url('../img/veggie.jpg');");
+    card.appendChild(cardContent);
+
+    var contentContainer = document.createElement('div');
+    contentContainer.style.paddingLeft = "10px";
+    contentContainer.style.paddingTop = "5px";
+    cardContent.appendChild(contentContainer);
+
+    card.getElementsByClassName('card-title')[0].innerHTML += " &mdash; 4 stars";
+
+    return card;
+}
+
+function buildRestaurantCard2(data) {
+	data['title'] = "Sorabol Korean Restaurant";
+    var id = data['user_name'] + '-' + data['type'];
+    var card = buildCardWithHeader(data);
+
+    var cardContent = document.createElement('div');
+    cardContent.setAttribute('class', 'card-content');
+    cardContent.setAttribute('style', "background-image: url('../img/bbq.jpg');");
+    card.appendChild(cardContent);
+
+    var contentContainer = document.createElement('div');
+    contentContainer.style.paddingLeft = "10px";
+    contentContainer.style.paddingTop = "5px";
+    cardContent.appendChild(contentContainer);
+
+    card.getElementsByClassName('card-title')[0].innerHTML += "&mdash; 3 stars";
 
     return card;
 }
