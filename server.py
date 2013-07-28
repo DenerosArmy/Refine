@@ -20,14 +20,17 @@ class Display(object):
     def add_device(self, dev_id):
         self.devices.add(dev_id)
         if self._type == "airport":
+            print("Adding airport cards for {0}".format(dev_id))
             self.update_queue += self.get_airport_data(dev_id)
         elif self._type == "mall":
+            print("Adding mall cards for {0}".format(dev_id))
             self.update_queue += self.get_mall_data(dev_id)
 
     def remove_device(self, dev_id):
+        print("Removing all cards for {0}".format(dev_id))
         self.devices.remove(dev_id)
         self.update_queue.append(
-            {"op": "-", "user_name": pi.get_username(dev_id)})
+            {"op": "-", "display_name": pi.get_displayname(dev_id)})
 
     def get_update(self):
         if self.update_queue:
@@ -48,14 +51,15 @@ class AndroidHandler(tornado.web.RequestHandler):
         dev_id = self.get_argument("device_id")
         disp_id = self.get_argument("display_id")
         data = self.get_argument("data")
-        curr_connection = get_connected_display(device_id)
-        if display_id and curr_connection != display_id:
+        curr_connection = get_connected_display(dev_id)
+        if curr_connection:
+            if disp_id and curr_connection != disp_id:
+                DISPLAYS[disp_id].add_device(dev_id)
+                DISPLAYS[curr_connection].remove_device(dev_id)
+            else:
+                DISPLAYS[curr_connection].remove_device(dev_id)
+        elif disp_id:
             DISPLAYS[disp_id].add_device(dev_id)
-            DISPLAYS[curr_connection].remove_device(dev_id)
-            DISPLAY_MANAGER.add_device(dev_id, disp_id)
-        elif curr_connection:
-            DISPLAYS[curr_connection].remove_device(dev_id)
-            DISPLAY_MANAGER.remove_device(dev_id)
         self.finish()
 
 
@@ -63,8 +67,8 @@ DISPLAYS = {"1": Display("airport"), "2": Display("mall")}
 
 
 def get_connected_display(device_id):
-    for disp_id, disp in DISPLAYS:
-        if disp.has_device(device_id):
+    for disp_id in DISPLAYS:
+        if DISPLAYS[disp_id].has_device(device_id):
             return disp_id
 
 
@@ -74,9 +78,9 @@ class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
         print("Connection established")
 
     def on_message(self, message):
-        print("Message received")
         update = DISPLAYS[message].get_update()
-        self.write_message(json.dump(update))
+        print("Sending message: {0}".format(update))
+        self.write_message(json.dumps(update))
 
     def on_close(self):
         print("Connection terminated")
