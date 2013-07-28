@@ -11,6 +11,19 @@ DATA = {
     user_name: "richie_zeng",
 }
 
+DATA2 = {
+    destination: "Miami, FL",
+    display_name:  "Jian L.",
+    flight_gate: "G45",
+    flight_number: "UA 456",
+    departure_time: "11:24 AM",
+    arrival_time: "5:31 PM",
+    op: "+",
+    profile_image_url: "https://lh6.googleusercontent.com/-TpuvTBw3vx8/UQM7IOmkmBI/AAAAAAAAAbI/DzNehhnVEWE/w256-h257-no/375563_10151168765508994_657905193_n.jpeg",
+    type: "flight_info",
+    user_name: "jian_leong",
+}
+
 RENTAL_DATA = {
     cars: [{
             model: "Honda Accord 2012",
@@ -36,7 +49,15 @@ TYPE_TO_TITLE = {
 }
 
 cardStack = {}
+// cardStack = {<user_name>: {"column": <column_elem>, "cards": [<cards>,]}}
 
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    var top = ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px",
+        left = ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px";
+    this.animate({top: top, left: left});
+    return this;
+}
 
 function addCard(data) {
     if (data['type'] == 'flight_info') {
@@ -55,25 +76,48 @@ function addCard(data) {
     else {
         var card = buildCardWithHeader(data);
     }
+
     var id = data['user_name'] + '-' + data['type'];
 
-    document.getElementById('card-column').appendChild(card);
-
     if (!cardStack[data['user_name']]) {
-        cardStack[data['user_name']] = []
+        var username = data['user_name'];
+        console.log("Creating column "+username+'-column');
+        var column = document.createElement('div');
+        column.setAttribute('class', 'card-column');
+        column.setAttribute('id', username + '-column');
+        var usernames = Object.keys(cardStack);
+        if (usernames.length > 0) { // If there's already a column
+          var i = 0;
+          while (usernames[i] == username) i++;
+          console.log(Object.keys(cardStack));
+          console.log(cardStack);
+          var old_user = Object.keys(cardStack)[i];
+          cardStack[old_user]['column'].setAttribute('style', 'float:left');
+          column.setAttribute('style', 'float:right');
+        } else {
+          column.setAttribute('style', 'margin-left:auto;margin-right:auto');
+        }
+        document.getElementById('card-container').appendChild(column);
+        cardStack[username] = {};
+        cardStack[username]['column'] = column;
+        cardStack[username]['cards'] = [];
     }
 
-    cardStack[data['user_name']].push(id);
+    cardStack[data['user_name']]['column'].appendChild(card);
+    cardStack[data['user_name']]['cards'].push(id);
 
     setTimeout(function () {
+        console.log($('div#' + id + '.card'));
         $('div#' + id + '.card').removeClass('hidden');
     }, 0);
+
 }
 
-
 function removeCards(data) {
-    if (cardStack[data['user_name']].length != 0) {
-        var id = cardStack[data['user_name']].pop();
+    console.log("Called");
+    var username = data['user_name'];
+    if (cardStack[username]['cards'].length != 0) {
+        var id = cardStack[username]['cards'].pop();
 
         setTimeout(function () {
             $('div#' + id + '.card').addClass('hidden');
@@ -82,16 +126,22 @@ function removeCards(data) {
     }
 
     setTimeout(function (){
-        var column = document.getElementById('card-column')
-        while (column.hasChildNodes()) {
-            column.removeChild(column.lastChild);
+        var column = document.getElementById(data['user_name'] + '-column');
+        document.getElementById('card-container').removeChild(column);
+        var usernames = Object.keys(cardStack);
+        if (usernames.length > 0) { // If there's already a column
+          var i = 0;
+          while (usernames[i] == username) i++;
+          var old_user = Object.keys(cardStack)[i];
+          cardStack[old_user]['column'].setAttribute('style', 'margin-left:auto;margin-right:auto');
         }
+
     }, 1000);
 }
 
 function buildCardWithHeader(data) {
     var id = data['user_name'] + '-' + data['type'];
-    
+
     var card = document.createElement('div');
     card.setAttribute('class', 'card hidden');
     card.setAttribute('id', id);
@@ -155,7 +205,6 @@ function buildFlightCard(data) {
 
     contentContainer.appendChild(flightDeparture);
     contentContainer.appendChild(flightArrival);
-
 
     return card
 }
