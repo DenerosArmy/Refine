@@ -229,7 +229,7 @@ function buildPlaceCard(data) {
 
     var cardContent = document.createElement('div');
     cardContent.setAttribute('class', 'card-content');
-    cardContent.setAttribute('style', "background-image: url('" + data['img'] + "');");
+    cardContent.setAttribute('style', "background-image: url('" + data['img'] + "');height: 350px;");
     card.appendChild(cardContent);
 
     var contentContainer = document.createElement('div');

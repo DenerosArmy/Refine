@@ -1,5 +1,5 @@
 console.log("Opening WS connection");
-var connection = new WebSocket('ws://198.61.194.98:9000/get_airport_updates')
+var connection = new WebSocket('ws://198.61.194.98:9000/get_miami_updates')
 
 // When the connection is open, send some data to the server
 connection.onopen = function () {

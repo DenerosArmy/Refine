@@ -9,8 +9,8 @@ opt.define("port", default = 9000, help = "Server Port Number", type = int)
 
 class Display(object):
 
-    def __init__(self, _type):
-        self._type = _type
+    def __init__(self, place):
+        self.place = place
         self.devices = set()
         self.update_queue = []
 
@@ -19,12 +19,8 @@ class Display(object):
 
     def add_device(self, dev_id):
         self.devices.add(dev_id)
-        if self._type == "airport":
-            print("Adding airport cards for {0}".format(dev_id))
-            self.update_queue += self.get_airport_data(dev_id)
-        elif self._type == "mall":
-            print("Adding mall cards for {0}".format(dev_id))
-            self.update_queue += self.get_mall_data(dev_id)
+        print("Adding cards for {0} in {1}".format(dev_id, self.place))
+        self.update_queue += self.get_data(dev_id, self.place)
 
     def remove_device(self, dev_id):
         print("Removing all cards for {0}".format(dev_id))
@@ -37,12 +33,8 @@ class Display(object):
             return self.update_queue.pop(0)
         return {"op": "0"}
 
-    def get_airport_data(self, device_id):
-        return pi.get_airport_data(device_id)
-
-    def get_mall_data(self, device_id):
-        #return pi.get_mall_data(device_id)
-        return "Test"
+    def get_data(self, device_id, place):
+        return pi.get_data(device_id, place)
 
 
 class CurlHandler(tornado.web.RequestHandler):
@@ -85,7 +77,7 @@ class AndroidHandler(tornado.websocket.WebSocketHandler):
         print("Connection with Android terminated")
 
 
-DISPLAYS = {"Jifi": Display("airport"), "Jifi2": Display("mall")}
+DISPLAYS = {"Jifi": Display("sf"), "NETGEAR": Display("miami")}
 
 
 def get_connected_display(device_id):
@@ -94,39 +86,39 @@ def get_connected_display(device_id):
             return disp_id
 
 
-class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
+class SFUpdateHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
-        print("Connection with airport display established")
+        print("Connection with SF display established")
 
     def on_message(self, message):
         update = DISPLAYS["Jifi"].get_update()
-        print("Sending message to airport: {0}".format(update))
+        print("Sending message to SF: {0}".format(update))
         self.write_message(json.dumps(update))
 
     def on_close(self):
-        print("Connection with airport display terminated")
+        print("Connection with SF display terminated")
 
 
-class MallUpdateHandler(tornado.websocket.WebSocketHandler):
+class MiamiUpdateHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
-        print("Connection with mall display established")
+        print("Connection with Miami display established")
 
     def on_message(self, message):
-        update = DISPLAYS["Jifi2"].get_update()
-        print("Sending message to mall: {0}".format(update))
+        update = DISPLAYS["NETGEAR"].get_update()
+        print("Sending message to Miami: {0}".format(update))
         self.write_message(json.dumps(update))
 
     def on_close(self):
-        print("Connection with mall display terminated")
+        print("Connection with Miami display terminated")
 
 
 application = tornado.web.Application([
     (r"/push_updates", AndroidHandler),
     (r"/curl_updates", CurlHandler),
-    (r"/get_airport_updates", AirportUpdateHandler),
-    (r"/get_mall_updates", MallUpdateHandler),
+    (r"/get_sf_updates", SFUpdateHandler),
+    (r"/get_miami_updates", MiamiUpdateHandler),
 ])
 
 if __name__ == "__main__":
