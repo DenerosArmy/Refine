@@ -135,12 +135,12 @@ def get_data(device_id, place):
     data = []
     display_name = User.get_display_name(device_id)
     if place == "sf":
-        if display_name == "Richie Z.":
+        if display_name == "Vaishaal S.":
             data = populate_data(data, sf_rich_data)
     if place == "miami":
-        if display_name == "Richie Z.":
+        if display_name == "Vaishaal S.":
             data = populate_data(data, mia_rich_data)
-        if display_name == "Jian L.":
+        if display_name == "\xe0\xa4\xaa\xe0\xa4\xb0\xe0\xa5\x8b\xe0\xa4\xae\xe0\xa4\xbe \xe0\xa4\xb5\xe0\xa5\x80.":
             data = populate_data(data, mia_jw_data)
     return data
 
