@@ -15,17 +15,44 @@ TYPE_TO_TITLE = {
     'flight_info': 'Flight Details',
 }
 
+cardStack = {}
+
 
 function addCard(data) {
-    if (data['type'] == 'flight_info') {
-        console.log(data);
-        var card = buildFlightCard(DATA);
-        document.getElementById('card-column').appendChild(card);
+    console.log(data);
+    var card = buildFlightCard(data);
+    var id = data['user_name'] + '-' + data['type'];
+
+    document.getElementById('card-column').appendChild(card);
+
+    if (!cardStack[data['user_name']]) {
+        cardStack[data['user_name']] = []
+    }
+
+    cardStack[data['user_name']].push(id);
+
+    setTimeout(function () {
+        $('div#' + id + '.card').removeClass('hidden');
+    }, 0);
+}
+
+
+function removeCards(data) {
+    if (cardStack[data['user_name']].length != 0) {
+        var id = cardStack[data['user_name']].pop();
 
         setTimeout(function () {
-            $('div.card').removeClass('hidden');
-        }, 0);
+            $('div#' + id + '.card').addClass('hidden');
+            removeCards(data);
+        }, 200);
     }
+
+    setTimeout(function (){
+        var column = document.getElementById('card-column')
+        while (column.hasChildNodes()) {
+            column.removeChild(column.lastChild);
+        }
+    }, 1000);
 }
 
 function buildFlightCard(data) {
