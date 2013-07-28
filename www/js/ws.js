@@ -11,10 +11,10 @@ connection.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
 
     if (data['op'] == '+') {
-        addCard(data);
+        //addCard(data);
     }
     else if (data['op'] == '-') {
-        removeCards(data);
+        //removeCards(data);
     }
     setTimeout(connection.onopen, 100);
 };
