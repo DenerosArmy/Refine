@@ -14,7 +14,7 @@
 </body>
 
 <script>
-  addCard(DATA);
+  
   newData = jQuery.extend({}, DATA);
   newData['type'] = 'places';
   addCard(newData);
@@ -22,6 +22,11 @@
   newData = jQuery.extend({}, DATA);
   newData['type'] = 'rentals';
   addCard(newData);
+  
+  newData = jQuery.extend({}, DATA);
+  newData['type'] = 'restaurants-meat';
+
+  setTimeout(function() {addCard(newData);}, 2000);
 
   setTimeout(function() {addCard(DATA2);}, 1000);
   setTimeout(function() {addCard(DATA2);}, 1000);
