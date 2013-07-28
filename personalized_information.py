@@ -1,3 +1,5 @@
+from yelp import *
+
 def get_username(device_id):
     return "Richie Zeng"
 
@@ -23,11 +25,10 @@ def get_destination_info():
     #returns an array of places of interest, hotels, cab companies
     return("Golden Gate Park", "The Hilton", "Hertz Car Rental")
 
-def get_food_info():
+def get_restaurant_data(location, search_term):
     #returns dictionary of restaurants and food rating
-    return{"McDonalds":3.4,
-           "TGIF":4.7,
-           "Crepes A Go Go":5.0}
+    return locate_food(location, search_term)
+    
 
 def get_movie_info():
     #returns dictionary of movies and personalized ratings
