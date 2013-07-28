@@ -174,15 +174,32 @@ div.hidden {
 /* Rental car specific */
 
 .card-content div.car-option-container {
-	height:100px;
+	float: left;
+	width:31.3%;
+	padding-left:1%;
+	padding-right:1%;
 }
 
 .card-content div.car-icon {
 	background-size: cover;
   border: 1px solid #888;
-	height:90px;
+	height:200px;
 	margin-bottom: 5px;
 	margin-right: 10px;
 	margin-top: 5px;
-	width: 140px;
+	width: 100%;
+}
+
+.card-content p.car-model {
+	color: #555;
+	font-family: 'Roboto', sans-serif;
+	font-size:22px;
+	font-weight: 300;
+}
+
+.card-content p.car-price {
+	color: #222;
+	font-family: 'Lato', sans-serif;
+	font-size:36px;
+	font-weight: 400;
 }
