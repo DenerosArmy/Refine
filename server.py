@@ -6,8 +6,6 @@ import tornado.options as opt
 
 opt.define("port", default = 9000, help = "Server Port Number", type = int)
 
-DISPLAY_MANAGER = DisplayManager()
-
 class AndroidHandler(tornado.web.RequestHandler):
 
     @tornado.web.asynchronous
@@ -42,8 +40,13 @@ class DisplayManager(object):
 
     def get_airport_data(self, disp_id):
         for dev_id in self.displays[disp_id]:
-            bus = get_bus(dev_id)
+            #bus = get_bus(dev_id)
+            pass
+        return
 
+DISPLAY_MANAGER = DisplayManager()
+
+import random
 
 class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
 
@@ -52,8 +55,9 @@ class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         print("Message received")
-        DEVICE_MANAGER.get_airport_data()
-        self.write_message("Server Response: " + message)
+        #DEVICE_MANAGER.get_airport_data()
+        message = random.choice(("0" for _ in range(9))+("add_card",))
+        self.write_message(message)
 
     def on_close(self):
         print("Connection terminated")
