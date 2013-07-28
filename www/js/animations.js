@@ -1,7 +1,20 @@
 DATA = {
-    'type': 'flight_info',
-    'user_name': 'richie'
+    destination: "Miami, FL",
+    display_name:  "Richie Z.",
+    flight_gate: "G45",
+    flight_number: "UA 456",
+    flight_time: "2045",
+    op: "+",
+    profile_image_url: "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/372355_590037593_561933968_q.jpg",
+    type: "flight_info",
+    user_name: "richie_zeng",
 }
+
+
+TYPE_TO_TITLE = {
+    'flight_info': 'Flight Details',
+}
+
 
 function addCard(data) {
     if (data['type'] == 'flight_info') {
@@ -33,17 +46,17 @@ function buildFlightCard(data) {
 
     var cardImage = document.createElement('div');
     cardImage.setAttribute('class', 'card-image');
-    cardImage.setAttribute('style', "background-image:url('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c327.4.546.546/s160x160/215356_10151641982947594_144941694_n.jpg')");
+    cardImage.setAttribute('style', "background-image:url('" + data['profile_image_url'] + "')");
     cardImageContainer.appendChild(cardImage);
 
     var cardTitle = document.createElement('p');
     cardTitle.setAttribute('class', 'card-title');
-    cardTitle.innerHTML = "Flight Details";
+    cardTitle.innerHTML = TYPE_TO_TITLE[data['type']]
     cardHeader.appendChild(cardTitle);
 
     var personName = document.createElement('p');
     personName.setAttribute('class', 'person-name');
-    personName.innerHTML = "Richie Z.";
+    personName.innerHTML = data['display_name'];
     cardHeader.appendChild(personName);
 
     return card;
