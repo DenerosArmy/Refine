@@ -15,8 +15,8 @@ def locate_food(location="san francisco westfield mall", search_term="vegetarian
     url_params['location'] = location
     url_params['term'] = search_term
 
-    
-    
+
+
     response = request('api.yelp.com', '/v2/search', url_params, consumer_key, consumer_secret, token, token_secret)
     j = json.dumps(response, sort_keys=True, indent=2)
     a = json.loads(j)
@@ -28,9 +28,9 @@ def locate_food(location="san francisco westfield mall", search_term="vegetarian
         restaurant["address"] = a["businesses"][i][u'location'][u'address']
         restaurant["image"] = a["businesses"][i][u'image_url']
         restaurant["rating"] = a["businesses"][i][u'rating']
-        restaurants_list.append(restaurant)                         
+        restaurants_list.append(restaurant)
     return restaurants_list
-  
+
 
 def request(host, path, url_params, consumer_key, consumer_secret, token, token_secret):
   """Returns response for API request."""
@@ -65,5 +65,3 @@ def request(host, path, url_params, consumer_key, consumer_secret, token, token_
     response = json.loads(error.read())
 
   return response
-
-
