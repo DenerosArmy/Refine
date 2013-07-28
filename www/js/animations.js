@@ -49,15 +49,6 @@ TYPE_TO_TITLE = {
 }
 
 cardStack = {}
-// cardStack = {<user_name>: {"column": <column_elem>, "cards": [<cards>,]}}
-
-jQuery.fn.center = function () {
-    this.css("position","absolute");
-    var top = ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px",
-        left = ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px";
-    this.animate({top: top, left: left});
-    return this;
-}
 
 function addCard(data) {
     if (data['type'] == 'flight_info') {
@@ -112,36 +103,37 @@ function addCard(data) {
 }
 
 function removeCards(data) {
-    console.log("Called");
     var username = data['user_name'];
-    if (cardStack[username]['cards'].length != 0) {
-        var id = cardStack[username]['cards'].pop();
+    if (cardStack[username]) {
+        if (cardStack[username]['cards'].length != 0) {
+            var id = cardStack[username]['cards'].pop();
 
-        setTimeout(function () {
-            $('div#' + id + '.card').addClass('hidden');
-            removeCards(data);
-        }, 100);
+            setTimeout(function () {
+                $('div#' + id + '.card').addClass('hidden');
+                removeCards(data);
+            }, 100);
+        }
     }
 
     setTimeout(function (){
         var column = document.getElementById(data['user_name'] + '-column');
-        document.getElementById('card-container').removeChild(column);
-        var usernames = Object.keys(cardStack);
-        if (usernames.length > 0) { // If there's still another column
-            var i = 0;
-            while (usernames[i] == username) i++;
-            var old_user = Object.keys(cardStack)[i];
-            column = cardStack[old_user]['column']
-            console.log(column.style.left);
-            console.log(column.style.right);
-            if (column.style.left) {
-                column.setAttribute('style', 'left:25%;');
-            } else if (column.style.right) {
-                column.setAttribute('style', 'right:25%;');
+        if (cardStack[data['user_name']]) {
+            column.parentNode.removeChild(column);
+            delete cardStack[data['user_name']];
+
+            var usernames = Object.keys(cardStack);
+            if (usernames.length > 0) { // If there's still another column
+                var remainingUser = usernames[0];
+                column = cardStack[remainingUser]['column']
+                if (column.style['cssText'].indexOf('left') !== -1) {
+                    column.setAttribute('style', 'left:25%');
+                } else if (column.style['cssText'].indexOf('right') !== -1) {
+                    column.setAttribute('style', 'right:25%');
+                }
             }
         }
+    }, 600);
 
-    }, 500);
 }
 
 function buildCardWithHeader(data) {
