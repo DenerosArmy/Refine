@@ -1,10 +1,10 @@
 from yelp import *
 
 def get_username(device_id):
-    return "Richie Zeng"
+    return get_displayname(device_id).replace(" ", "_").replace(".", "_").lower()
 
 def get_displayname(device_id):
-    return get_username(device_id).replace(" ", "_").lower()
+    return "Richie Z."
 
 def get_airport_data(device_id):
     #returns a dictionary
@@ -28,7 +28,7 @@ def get_destination_info():
 def get_restaurant_data(location, search_term):
     #returns dictionary of restaurants and food rating
     return locate_food(location, search_term)
-    
+
 
 def get_movie_info():
     #returns dictionary of movies and personalized ratings
