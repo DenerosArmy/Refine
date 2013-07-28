@@ -3,8 +3,43 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 import tornado.options as opt
+import personalized_information as pi
 
 opt.define("port", default = 9000, help = "Server Port Number", type = int)
+
+class Display(object):
+
+    def __init__(self, _type):
+        self._type = _type
+        self.devices = set()
+        self.update_queue = []
+
+    def has_device(self, device_id):
+        return device_id in self.devices
+
+    def add_device(self, dev_id):
+        self.devices.add(dev_id)
+        if self._type == "airport":
+            self.update_queue += self.get_airport_data(dev_id)
+        elif self._type == "mall":
+            self.update_queue += self.get_mall_data(dev_id)
+
+    def remove_device(self, dev_id):
+        self.devices.remove(dev_id)
+        self.update_queue.append(
+            {"op": "-", "user_name": pi.get_username(dev_id)})
+
+    def get_update(self):
+        if self.update_queue:
+            return self.update_queue.pop(0)
+        return {"op": "0"}
+
+    def get_airport_data(self, device_id):
+        return pi.get_airport_data(device_id)
+
+    def get_mall_data(self, device_id):
+        return pi.get_mall_data(device_id)
+
 
 class AndroidHandler(tornado.web.RequestHandler):
 
@@ -13,40 +48,25 @@ class AndroidHandler(tornado.web.RequestHandler):
         dev_id = self.get_argument("device_id")
         disp_id = self.get_argument("display_id")
         data = self.get_argument("data")
-        if display_id:
+        curr_connection = get_connected_display(device_id)
+        if display_id and curr_connection != display_id:
+            DISPLAYS[disp_id].add_device(dev_id)
+            DISPLAYS[curr_connection].remove_device(dev_id)
             DISPLAY_MANAGER.add_device(dev_id, disp_id)
-        else:
+        elif curr_connection:
+            DISPLAYS[curr_connection].remove_device(dev_id)
             DISPLAY_MANAGER.remove_device(dev_id)
         self.finish()
 
 
-class DisplayManager(object):
+DISPLAYS = {"1": Display("airport"), "2": Display("mall")}
 
-    def __init__(self):
-        self.displays = {}  # Mapping from display ID to a set of device IDs
-        self.devices = {}  # Mapping from device ID to display ID
 
-    def add_display(self, disp_id):
-        self.displays[disp_id] = {}
+def get_connected_display(device_id):
+    for disp_id, disp in DISPLAYS:
+        if disp.has_device(device_id):
+            return disp_id
 
-    def add_device(self, dev_id, disp_id):
-        self.displays[disp_id].add(dev_id)
-        self.devices[dev_id] = disp_id
-
-    def remove_device(self, dev_id):
-        if dev_id in self.devices:
-            self.displays[self.devices[dev_id]].remove(dev_id)
-            self.devices[dev_id] = None
-
-    def get_airport_data(self, disp_id):
-        for dev_id in self.displays[disp_id]:
-            #bus = get_bus(dev_id)
-            pass
-        return
-
-DISPLAY_MANAGER = DisplayManager()
-
-import random
 
 class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
 
@@ -55,9 +75,8 @@ class AirportUpdateHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         print("Message received")
-        #DEVICE_MANAGER.get_airport_data()
-        message = random.choice(("0" for _ in range(9))+("add_card",))
-        self.write_message(message)
+        update = DISPLAYS[message].get_update()
+        self.write_message(json.dump(update))
 
     def on_close(self):
         print("Connection terminated")
